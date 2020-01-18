@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +49,7 @@ public class MovieController {
         return movieRepository.findById(movieId)
                 .flatMap(existingMovie -> {
                     existingMovie.setName(movie.getName());
+                    existingMovie.setYear(movie.getYear());
                     return movieRepository.save(existingMovie);
                 })
                 .map(updatedMovie -> new ResponseEntity<>(updatedMovie, HttpStatus.OK))
@@ -66,6 +68,7 @@ public class MovieController {
     }
 
     // Movies are Sent to the client as Server Sent Events
+    @CrossOrigin
     @GetMapping(value = "/stream/movies", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Movie> streamAllTweets() {
         return movieRepository.findAll();
