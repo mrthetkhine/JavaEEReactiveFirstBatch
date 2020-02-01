@@ -24,7 +24,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("api")
-		
+@CrossOrigin		
 public class MovieController {
 	@Autowired
     private MovieRepository movieRepository;
