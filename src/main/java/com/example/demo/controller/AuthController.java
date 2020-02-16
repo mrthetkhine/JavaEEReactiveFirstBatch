@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.Token;
 import com.example.demo.model.Movie;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 
 @RestController
-@CrossOrigin		
+@CrossOrigin	
 public class AuthController {
 	  @Autowired
 	  private UserService userService;
@@ -22,8 +23,11 @@ public class AuthController {
 	
 
 	  @PostMapping("/login")
-	  public String login(@Valid @RequestBody User user) {
-	    return userService.login(user.getUsername(), user.getPassword());
+	  public Token login(@Valid @RequestBody User user) {
+		Token token = new Token();
+		String tok = userService.login(user.getUsername(), user.getPassword());
+		token.setToken(tok);
+	    return token;
 	  }
 
 	  @PostMapping("/register")
