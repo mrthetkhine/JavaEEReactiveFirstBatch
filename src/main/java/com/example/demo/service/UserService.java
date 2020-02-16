@@ -42,7 +42,8 @@ public class UserService {
 
   public String register(User user) {
 	  User another = this.userRepository.findByUsername(user.getUsername());
-	  if(another != null)
+	  System.out.println("User another "+another);
+	  if(another == null)
 	  {
 		  user.setPassword(passwordEncoder.encode(user.getPassword()));
 	      userRepository.save(user);
