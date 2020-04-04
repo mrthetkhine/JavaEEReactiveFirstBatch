@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
@@ -22,13 +23,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private JwtTokenProvider jwtTokenProvider;
 
-  
+  @Bean
+  public WebMvcConfigurerAdapter corsConfigurer() {
+      return new WebMvcConfigurerAdapter() {
+          @Override
+          public void addCorsMappings(CorsRegistry registry) {
+              registry.addMapping("/**")
+                      .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
+          }
+      };
+  } 
   
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
  
-    http.csrf().disable();
+    http.cors().and().csrf().disable();
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     // Entry points
